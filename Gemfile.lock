@@ -450,6 +450,7 @@ DEPENDENCIES
   rails (~> 8.1.2)
   rubocop-rails-omakase
   ruby-openai (~> 7.0)
+  rubyzip (~> 3.2)
   selenium-webdriver
   sentimental (~> 1.4)
   sidekiq (~> 7.0)

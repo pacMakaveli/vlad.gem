@@ -7,6 +7,9 @@
 # - Updates conversation date ranges
 # - Creates/finds participants
 # - Runs analytics after import
+# - Supports ZIP files with chat.txt and media attachments
+
+require "zip"
 
 class ImportProcessor
   attr_reader :import_batch, :conversation, :results
@@ -93,11 +96,47 @@ class ImportProcessor
   private
 
   def read_file_content
-    if import_batch.file.attached?
-      import_batch.file.download
-    else
+    unless import_batch.file.attached?
       raise "No file attached to import batch"
     end
+
+    filename = import_batch.file.filename.to_s
+
+    # Check if it's a ZIP file
+    if filename.end_with?(".zip")
+      extract_chat_from_zip
+    else
+      # Plain text file
+      import_batch.file.download
+    end
+  end
+
+  def extract_chat_from_zip
+    chat_content = nil
+
+    import_batch.file.open do |file|
+      Zip::File.open(file.path) do |zip_file|
+        # Find the chat text file (usually _chat.txt or WhatsApp Chat.txt)
+        chat_entry = zip_file.entries.find do |entry|
+          entry.name.end_with?("_chat.txt") ||
+          entry.name.end_with?("Chat.txt") ||
+          entry.name == "chat.txt"
+        end
+
+        unless chat_entry
+          raise "No chat.txt file found in ZIP archive"
+        end
+
+        # Read the chat content
+        chat_content = chat_entry.get_input_stream.read
+
+        # TODO: Handle media attachments
+        # For now, we'll just extract the text. Media handling can be added later
+        # media_entries = zip_file.entries.reject { |e| e.name.end_with?(".txt") }
+      end
+    end
+
+    chat_content
   end
 
   def import_message(msg_data)
