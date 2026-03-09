@@ -30,7 +30,8 @@ Vlad's Gem takes exported WhatsApp chat files and transforms them into rich, lon
 ## Tech Stack
 
 - **Ruby on Rails 8.1** - Modern Rails with all the good stuff
-- **PostgreSQL** - Reliable relational database
+- **SQLite** - Simple, file-based database for local development
+- **PostgreSQL** - Production database (configured but optional for local dev)
 - **Stimulus + Turbo** - Hotwire for reactive UI
 - **Chart.js** - Beautiful, responsive charts
 - **Tailwind CSS** - Utility-first styling
@@ -74,9 +75,10 @@ Vlad's Gem takes exported WhatsApp chat files and transforms them into rich, lon
 ### Prerequisites
 
 - Ruby 3.4.7
-- PostgreSQL 14+ (install via Homebrew: `brew install postgresql@16`)
 - Node.js (for asset compilation)
 - OpenAI API key (for audio transcription, optional)
+
+**Note:** Uses SQLite for local development (no PostgreSQL needed). PostgreSQL is only required for production deployment.
 
 ### Installation
 
@@ -90,24 +92,18 @@ Vlad's Gem takes exported WhatsApp chat files and transforms them into rich, lon
    bundle install
    ```
 
-3. **Start PostgreSQL** (if not running):
-   ```bash
-   brew services start postgresql@16
-   # or whichever version you installed
-   ```
-
-4. **Create and setup database**:
+3. **Create and setup database**:
    ```bash
    bin/rails db:create
    bin/rails db:migrate
    ```
 
-5. **Set environment variables** (optional, for audio transcription):
+4. **Set environment variables** (optional, for audio transcription):
    ```bash
    export OPENAI_API_KEY="your-openai-api-key"
    ```
 
-6. **Start the development server**:
+5. **Start the development server**:
    ```bash
    bin/dev
    # This starts both Rails server and Tailwind CSS watcher
@@ -120,7 +116,7 @@ Vlad's Gem takes exported WhatsApp chat files and transforms them into rich, lon
    bin/rails tailwindcss:watch
    ```
 
-7. **Visit the app**:
+6. **Visit the app**:
    ```
    http://localhost:3000
    ```

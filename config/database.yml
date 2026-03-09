@@ -1,40 +1,49 @@
-# PostgreSQL configuration for Vlad's Gem
+# SQLite for development/test, PostgreSQL for production
 default: &default
-  adapter: postgresql
-  encoding: unicode
+  adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
-  database: vlad_gem_development
+  database: storage/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: vlad_gem_test
+  database: storage/test.sqlite3
 
+# Production uses PostgreSQL
 production:
   primary:
-    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     database: vlad_gem_production
     username: vlad_gem
     password: <%= ENV["VLAD_GEM_DATABASE_PASSWORD"] %>
   cache:
-    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     database: vlad_gem_production_cache
     username: vlad_gem
     password: <%= ENV["VLAD_GEM_DATABASE_PASSWORD"] %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     database: vlad_gem_production_queue
     username: vlad_gem
     password: <%= ENV["VLAD_GEM_DATABASE_PASSWORD"] %>
     migrations_paths: db/queue_migrate
   cable:
-    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     database: vlad_gem_production_cable
     username: vlad_gem
     password: <%= ENV["VLAD_GEM_DATABASE_PASSWORD"] %>
