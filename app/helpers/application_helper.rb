@@ -154,12 +154,12 @@ module ApplicationHelper
     participant_ids = trend.first[:initiations].keys
     participant_names = Participant.where(id: participant_ids).pluck(:id, :name).to_h
 
-    datasets = participant_ids.map do |pid|
+    datasets = participant_ids.map.with_index do |pid, index|
       {
-        label: participant_names[pid] || "Unknown",
+        label: participant_names[pid.to_i] || "Unknown",
         data: trend.map { |t| t[:initiations][pid] || 0 },
-        backgroundColor: pid.even? ? "rgba(147, 51, 234, 0.6)" : "rgba(59, 130, 246, 0.6)",
-        borderColor: pid.even? ? "rgb(147, 51, 234)" : "rgb(59, 130, 246)",
+        backgroundColor: index.even? ? "rgba(147, 51, 234, 0.6)" : "rgba(59, 130, 246, 0.6)",
+        borderColor: index.even? ? "rgb(147, 51, 234)" : "rgb(59, 130, 246)",
         borderWidth: 1
       }
     end
