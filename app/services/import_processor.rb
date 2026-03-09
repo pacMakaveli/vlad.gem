@@ -127,8 +127,8 @@ class ImportProcessor
           raise "No chat.txt file found in ZIP archive"
         end
 
-        # Read the chat content
-        chat_content = chat_entry.get_input_stream.read
+        # Read the chat content and force UTF-8 encoding
+        chat_content = chat_entry.get_input_stream.read.force_encoding("UTF-8")
 
         # TODO: Handle media attachments
         # For now, we'll just extract the text. Media handling can be added later
