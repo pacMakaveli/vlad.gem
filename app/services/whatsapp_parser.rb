@@ -14,7 +14,8 @@
 
 class WhatsappParser
   # Match pattern: [DD/MM/YYYY, HH:MM] Name: Message
-  MESSAGE_REGEX = /^\[(\d{2}\/\d{2}\/\d{4}),\s(\d{2}:\d{2})\]\s([^:]+):\s(.*)$/
+  # Supports both 24-hour (21:15) and 12-hour (10:11:15 pm) time formats
+  MESSAGE_REGEX = /^\[(\d{2}\/\d{2}\/\d{4}),\s(.+?)\]\s([^:]+):\s(.*)$/
 
   attr_reader :content, :errors
 
@@ -89,13 +90,19 @@ class WhatsappParser
     return nil unless match
 
     date_str = match[1] # DD/MM/YYYY
-    time_str = match[2] # HH:MM
+    time_str = match[2] # Could be "HH:MM" or "HH:MM:SS am/pm"
     sender = match[3].strip
     content = match[4].strip
 
-    # Parse datetime
+    # Parse datetime - handle both 24-hour and 12-hour formats
     begin
-      datetime = DateTime.strptime("#{date_str} #{time_str}", "%d/%m/%Y %H:%M")
+      # Try 12-hour format first (10:11:15 pm)
+      if time_str.match?(/am|pm/i)
+        datetime = DateTime.strptime("#{date_str} #{time_str}", "%d/%m/%Y %I:%M:%S %p")
+      else
+        # 24-hour format (21:15)
+        datetime = DateTime.strptime("#{date_str} #{time_str}", "%d/%m/%Y %H:%M")
+      end
     rescue ArgumentError => e
       @errors << "Line #{line_number}: Invalid date/time format - #{e.message}"
       datetime = Time.current
