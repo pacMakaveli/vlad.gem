@@ -35,7 +35,7 @@ Vlad's Gem takes exported WhatsApp chat files and transforms them into rich, lon
 - **Stimulus + Turbo** - Hotwire for reactive UI
 - **Chart.js** - Beautiful, responsive charts
 - **Tailwind CSS** - Utility-first styling
-- **Sidekiq** - Background job processing
+- **Solid Queue** - Database-backed background jobs (no Redis needed)
 - **OpenAI Whisper** - Audio transcription (via ruby-openai gem)
 - **Sentimental** - Sentiment analysis
 
@@ -123,11 +123,9 @@ Vlad's Gem takes exported WhatsApp chat files and transforms them into rich, lon
 
 ### Running Background Jobs
 
-For audio transcription and import processing:
+Background jobs (for imports and audio transcription) are handled by Solid Queue, which uses the database instead of Redis.
 
-```bash
-bundle exec sidekiq
-```
+When you run `bin/dev`, Solid Queue starts automatically. No additional setup needed!
 
 ## Usage Guide
 
