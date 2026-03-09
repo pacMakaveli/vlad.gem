@@ -81,6 +81,11 @@
       <div class="text-sm text-gray-500">Time patterns</div>
     <% end %>
 
+    <%= link_to conversation_daily_breakdown_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Daily Breakdown</div>
+      <div class="text-sm text-gray-500">Hour-by-hour</div>
+    <% end %>
+
     <%= link_to conversation_import_batches_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
       <div class="font-semibold text-gray-900">Imports</div>
       <div class="text-sm text-gray-500">Import history</div>

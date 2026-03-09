@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get "analytics/new_since_last", to: "analytics#new_since_last", as: :new_since_last
     get "analytics/response_drift", to: "analytics#response_drift", as: :response_drift
     get "analytics/daily_rhythm", to: "analytics#daily_rhythm", as: :daily_rhythm
+    get "analytics/daily_breakdown", to: "analytics#daily_breakdown", as: :daily_breakdown
     get "analytics/chart_data", to: "analytics#chart_data", as: :chart_data
   end
 

@@ -1,0 +1,96 @@
+<% content_for :title, "Daily Breakdown - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to #{@conversation.title}", conversation_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<h1 class="text-3xl font-bold text-gray-900 mb-2">Daily Breakdown</h1>
+<p class="text-gray-600 mb-8">Hour-by-hour activity breakdown for each day</p>
+
+<!-- Time Range Selector -->
+<div class="mb-6">
+  <div class="inline-flex rounded-lg border border-gray-300 bg-white p-1">
+    <%= link_to "7 Days", conversation_daily_breakdown_path(@conversation, days: 7), class: "px-4 py-2 rounded #{params[:days] == '7' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+    <%= link_to "30 Days", conversation_daily_breakdown_path(@conversation, days: 30), class: "px-4 py-2 rounded #{params[:days].nil? || params[:days] == '30' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+    <%= link_to "90 Days", conversation_daily_breakdown_path(@conversation, days: 90), class: "px-4 py-2 rounded #{params[:days] == '90' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+    <%= link_to "All Time", conversation_daily_breakdown_path(@conversation, days: 365), class: "px-4 py-2 rounded #{params[:days] == '365' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+  </div>
+</div>
+
+<!-- Daily Breakdown Table -->
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+  <% @breakdown.reverse.each_with_index do |day, index| %>
+    <div class="border-b border-gray-200 last:border-b-0">
+      <!-- Day Header -->
+      <div class="bg-gray-50 px-6 py-4 cursor-pointer hover:bg-gray-100"
+           data-controller="toggle"
+           data-action="click->toggle#toggle">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <span class="text-sm font-medium text-gray-500">Day <%= @breakdown.length - index %></span>
+            <h3 class="text-lg font-semibold text-gray-900">
+              <%= day[:date].strftime("%A, %B %d, %Y") %>
+            </h3>
+          </div>
+          <div class="flex items-center space-x-6">
+            <div class="text-right">
+              <div class="text-2xl font-bold text-purple-600"><%= day[:total_messages] %></div>
+              <div class="text-sm text-gray-500">messages</div>
+            </div>
+            <div class="text-sm text-gray-600">
+              <% day[:participants].each do |name, count| %>
+                <div><%= name %>: <span class="font-medium"><%= count %></span></div>
+              <% end %>
+            </div>
+            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" data-toggle-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hourly Breakdown -->
+      <div class="hidden px-6 py-4" data-toggle-target="content">
+        <div class="mb-4">
+          <h4 class="text-sm font-medium text-gray-700 mb-2">24-Hour Activity</h4>
+          <div class="flex items-end space-x-1 h-24">
+            <% day[:hourly_distribution].each_with_index do |count, hour| %>
+              <div class="flex-1 flex flex-col items-center">
+                <% max_hour = day[:hourly_distribution].max %>
+                <% height = max_hour > 0 ? (count.to_f / max_hour * 100).round : 0 %>
+                <div class="w-full bg-purple-500 rounded-t transition-all hover:bg-purple-600"
+                     style="height: <%= height %>%;"
+                     title="<%= hour.to_s.rjust(2, '0') %>:00 - <%= count %> messages">
+                </div>
+                <% if hour % 4 == 0 %>
+                  <div class="text-xs text-gray-500 mt-1"><%= hour.to_s.rjust(2, '0') %></div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @breakdown.empty? %>
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <p class="text-gray-500">No messages in the selected time range.</p>
+  </div>
+<% end %>
+
+<script>
+  // Simple toggle controller inline
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-controller="toggle"]').forEach(element => {
+      element.addEventListener('click', () => {
+        const content = element.nextElementSibling;
+        const icon = element.querySelector('[data-toggle-target="icon"]');
+
+        content.classList.toggle('hidden');
+        icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+    });
+  });
+</script>

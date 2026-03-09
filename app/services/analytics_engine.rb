@@ -194,6 +194,38 @@ class AnalyticsEngine
     }
   end
 
+  # Get daily breakdown - hour-by-hour activity for each day
+  def daily_breakdown(days: 30)
+    end_date = Date.today
+    start_date = end_date - days.days
+
+    messages = conversation.messages
+      .where("sent_at >= ? AND sent_at <= ?", start_date.beginning_of_day, end_date.end_of_day)
+      .order(:sent_at)
+
+    # Group messages by date and hour
+    breakdown = {}
+
+    messages.find_each do |message|
+      date = message.sent_at.to_date
+      hour = message.sent_at.hour
+
+      breakdown[date] ||= {
+        date: date,
+        total_messages: 0,
+        hourly_distribution: Array.new(24, 0),
+        participants: Hash.new(0)
+      }
+
+      breakdown[date][:total_messages] += 1
+      breakdown[date][:hourly_distribution][hour] += 1
+      breakdown[date][:participants][message.participant.name] += 1
+    end
+
+    # Convert to array and sort by date
+    breakdown.values.sort_by { |d| d[:date] }
+  end
+
   private
 
   def calculate_avg_messages_per_day

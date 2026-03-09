@@ -62,6 +62,13 @@ class AnalyticsController < ApplicationController
       .sort_by { |day, _| Date::DAYNAMES.index(day) }
   end
 
+  # Daily Breakdown - detailed view of each day with hour-by-hour breakdown
+  def daily_breakdown
+    @engine = AnalyticsEngine.new(@conversation)
+    @days = params[:days]&.to_i || 30
+    @breakdown = @engine.daily_breakdown(days: @days)
+  end
+
   # API endpoint for chart data
   def chart_data
     @engine = AnalyticsEngine.new(@conversation)
