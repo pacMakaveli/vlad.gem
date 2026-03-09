@@ -1,0 +1,100 @@
+<% content_for :title, "Pulse - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to #{@conversation.title}", conversation_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<h1 class="text-3xl font-bold text-gray-900 mb-2">Pulse</h1>
+<p class="text-gray-600 mb-8">Message volume and engagement metrics over time</p>
+
+<!-- Time Range Selector -->
+<div class="mb-6">
+  <div class="inline-flex rounded-lg border border-gray-300 bg-white p-1">
+    <%= link_to "7 Days", conversation_pulse_path(@conversation, days: 7), class: "px-4 py-2 rounded #{params[:days] == '7' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+    <%= link_to "30 Days", conversation_pulse_path(@conversation, days: 30), class: "px-4 py-2 rounded #{params[:days].nil? || params[:days] == '30' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+    <%= link_to "90 Days", conversation_pulse_path(@conversation, days: 90), class: "px-4 py-2 rounded #{params[:days] == '90' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+    <%= link_to "All Time", conversation_pulse_path(@conversation, days: 365), class: "px-4 py-2 rounded #{params[:days] == '365' ? 'bg-purple-600 text-white' : 'text-gray-700 hover:bg-gray-50'}" %>
+  </div>
+</div>
+
+<!-- Message Volume Chart -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="text-xl font-semibold text-gray-900 mb-4">Message Volume</h2>
+  <div style="height: 300px;">
+    <canvas
+      data-controller="chart"
+      data-chart-type-value="line"
+      data-chart-data-value='<%= chart_data_for_volume(@volume_trend).to_json %>'
+    ></canvas>
+  </div>
+</div>
+
+<!-- Hourly Heatmap -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="text-xl font-semibold text-gray-900 mb-4">Hourly Activity Heatmap</h2>
+  <p class="text-sm text-gray-500 mb-4">When do you chat the most?</p>
+  <div style="height: 300px;">
+    <canvas
+      data-controller="chart"
+      data-chart-type-value="bar"
+      data-chart-data-value='<%= chart_data_for_hourly(@hourly_heatmap).to_json %>'
+    ></canvas>
+  </div>
+</div>
+
+<!-- Rolling 7-Day Engagement -->
+<% if @rolling_engagement.any? %>
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Rolling 7-Day Engagement</h2>
+    <p class="text-sm text-gray-500 mb-4">Smoothed engagement trends</p>
+    <div style="height: 300px;">
+      <canvas
+        data-controller="chart"
+        data-chart-type-value="line"
+        data-chart-data-value='<%= chart_data_for_rolling(@rolling_engagement).to_json %>'
+      ></canvas>
+    </div>
+  </div>
+<% end %>
+
+<%# Helper methods for chart data formatting %>
+<%
+  def chart_data_for_volume(trend)
+    {
+      labels: trend.map { |d| d[:date].strftime("%b %d") },
+      datasets: [{
+        label: 'Messages',
+        data: trend.map { |d| d[:messages] },
+        borderColor: 'rgb(147, 51, 234)',
+        backgroundColor: 'rgba(147, 51, 234, 0.1)',
+        tension: 0.3
+      }]
+    }
+  end
+
+  def chart_data_for_hourly(heatmap)
+    {
+      labels: heatmap.map { |h| "#{h[:hour]}:00" },
+      datasets: [{
+        label: 'Messages',
+        data: heatmap.map { |h| h[:messages] },
+        backgroundColor: 'rgba(147, 51, 234, 0.6)',
+        borderColor: 'rgb(147, 51, 234)',
+        borderWidth: 1
+      }]
+    }
+  end
+
+  def chart_data_for_rolling(engagement)
+    {
+      labels: engagement.map { |e| e[:end_date].strftime("%b %d") },
+      datasets: [{
+        label: 'Messages (7-day avg)',
+        data: engagement.map { |e| e[:total_messages] },
+        borderColor: 'rgb(147, 51, 234)',
+        backgroundColor: 'rgba(147, 51, 234, 0.1)',
+        tension: 0.3
+      }]
+    }
+  end
+%>

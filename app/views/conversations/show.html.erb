@@ -1,0 +1,138 @@
+<% content_for :title, "#{@conversation.title} - Vlad's Gem 💎" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to Conversations", conversations_path, class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<div class="flex justify-between items-start mb-8">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @conversation.title %></h1>
+    <% if @conversation.description.present? %>
+      <p class="text-gray-600"><%= @conversation.description %></p>
+    <% end %>
+  </div>
+  <div class="flex space-x-2">
+    <%= link_to "Import Chat", new_conversation_import_batch_path(@conversation), class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700" %>
+    <%= link_to "Edit", edit_conversation_path(@conversation), class: "border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50" %>
+  </div>
+</div>
+
+<!-- Summary Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="text-sm text-gray-500 mb-1">Total Messages</div>
+    <div class="text-3xl font-bold text-gray-900"><%= @summary_stats[:total_messages] %></div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="text-sm text-gray-500 mb-1">Days</div>
+    <div class="text-3xl font-bold text-gray-900"><%= @summary_stats.dig(:date_range, :days) || 0 %></div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="text-sm text-gray-500 mb-1">Avg per Day</div>
+    <div class="text-3xl font-bold text-gray-900"><%= @summary_stats[:avg_messages_per_day]&.round(1) || 0 %></div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="text-sm text-gray-500 mb-1">Avg Sentiment</div>
+    <div class="text-3xl font-bold <%= sentiment_color(@summary_stats[:avg_sentiment]) %>">
+      <%= (@summary_stats[:avg_sentiment] || 0).round(2) %>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics Navigation -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="text-xl font-semibold text-gray-900 mb-4">Analytics Views</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <%= link_to conversation_timeline_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Timeline</div>
+      <div class="text-sm text-gray-500">Full conversation view</div>
+    <% end %>
+
+    <%= link_to conversation_pulse_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Pulse</div>
+      <div class="text-sm text-gray-500">Message volume & engagement</div>
+    <% end %>
+
+    <%= link_to conversation_shift_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Shift</div>
+      <div class="text-sm text-gray-500">Sentiment & tone over time</div>
+    <% end %>
+
+    <%= link_to conversation_chapters_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Chapters</div>
+      <div class="text-sm text-gray-500">Conversation phases</div>
+    <% end %>
+
+    <%= link_to conversation_new_since_last_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">New Since Last</div>
+      <div class="text-sm text-gray-500">Latest additions</div>
+    <% end %>
+
+    <%= link_to conversation_response_drift_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Response Drift</div>
+      <div class="text-sm text-gray-500">Response patterns</div>
+    <% end %>
+
+    <%= link_to conversation_daily_rhythm_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Daily Rhythm</div>
+      <div class="text-sm text-gray-500">Time patterns</div>
+    <% end %>
+
+    <%= link_to conversation_import_batches_path(@conversation), class: "p-4 border border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition" do %>
+      <div class="font-semibold text-gray-900">Imports</div>
+      <div class="text-sm text-gray-500">Import history</div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Participants -->
+<% if @summary_stats[:participants].any? %>
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Participants</h2>
+    <div class="space-y-3">
+      <% @summary_stats[:participants].each do |participant| %>
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900"><%= participant[:name] %></span>
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-600"><%= participant[:message_count] %> messages</span>
+            <span class="text-sm text-gray-500"><%= participant[:percentage] %>%</span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<!-- Recent Messages -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold text-gray-900">Recent Messages</h2>
+    <%= link_to "View All →", conversation_timeline_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+  </div>
+
+  <% if @recent_messages.any? %>
+    <div class="space-y-4">
+      <% @recent_messages.each do |message| %>
+        <div class="border-l-4 <%= participant_color(message.participant) %> pl-4 py-2">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-medium text-gray-900"><%= message.participant.name %></span>
+            <span class="text-sm text-gray-500"><%= message.sent_at.strftime("%b %d, %Y %H:%M") %></span>
+          </div>
+          <p class="text-gray-700"><%= truncate(message.content, length: 150) %></p>
+          <% if message.sentiment_label %>
+            <span class="inline-block mt-1 text-xs px-2 py-1 rounded <%= sentiment_badge_color(message.sentiment_label) %>">
+              <%= message.sentiment_label %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500 text-center py-8">No messages yet. Import a chat to get started.</p>
+  <% end %>
+</div>
+
+<%# Helper methods will be added to application_helper.rb %>
