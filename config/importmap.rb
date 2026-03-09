@@ -6,5 +6,5 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 
-# Chart.js for analytics - using auto-register version
-pin "chart.js/auto", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"
+# Chart.js for analytics - using ESM build from esm.sh
+pin "chart.js/auto", to: "https://esm.sh/chart.js@4.4.0/auto"
