@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import Chart from "chart.js"
 
 // Connects to data-controller="chart"
 export default class extends Controller {
@@ -54,7 +53,8 @@ export default class extends Controller {
       ? { ...defaultOptions, ...this.optionsValue }
       : defaultOptions
 
-    this.chart = new Chart(ctx, {
+    // Chart.js UMD build exposes Chart on window
+    this.chart = new window.Chart(ctx, {
       type: this.typeValue || 'line',
       data: this.dataValue,
       options: options
