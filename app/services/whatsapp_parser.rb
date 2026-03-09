@@ -94,17 +94,20 @@ class WhatsappParser
     sender = match[3].strip
     content = match[4].strip
 
+    # Clean up invisible Unicode characters (WhatsApp uses narrow no-break spaces)
+    time_str = time_str.gsub(/[[:space:]]/, " ").strip
+
     # Parse datetime - handle both 24-hour and 12-hour formats
     begin
       # Try 12-hour format first (10:11:15 pm)
       if time_str.match?(/am|pm/i)
-        datetime = DateTime.strptime("#{date_str} #{time_str}", "%d/%m/%Y %I:%M:%S %p")
+        datetime = Time.strptime("#{date_str} #{time_str}", "%d/%m/%Y %I:%M:%S %p")
       else
         # 24-hour format (21:15)
-        datetime = DateTime.strptime("#{date_str} #{time_str}", "%d/%m/%Y %H:%M")
+        datetime = Time.strptime("#{date_str} #{time_str}", "%d/%m/%Y %H:%M")
       end
     rescue ArgumentError => e
-      @errors << "Line #{line_number}: Invalid date/time format - #{e.message}"
+      @errors << "Line #{line_number}: Invalid date/time format - #{date_str} #{time_str} - #{e.message}"
       datetime = Time.current
     end
 
