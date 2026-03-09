@@ -56,32 +56,3 @@
   </div>
 </div>
 
-<%
-  def chart_data_for_sentiment(trend)
-    {
-      labels: trend.map { |d| d[:date].strftime("%b %d") },
-      datasets: [{
-        label: 'Sentiment Score',
-        data: trend.map { |d| d[:sentiment] },
-        borderColor: 'rgb(147, 51, 234)',
-        backgroundColor: 'rgba(147, 51, 234, 0.1)',
-        tension: 0.3,
-        fill: true
-      }]
-    }
-  end
-
-  def chart_data_for_response_time(trend)
-    {
-      labels: trend.map { |d| d[:date].strftime("%b %d") },
-      datasets: [{
-        label: 'Avg Response Time (minutes)',
-        data: trend.map { |d| (d[:avg_response_time] || 0) / 60.0 },
-        borderColor: 'rgb(59, 130, 246)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-        tension: 0.3,
-        fill: true
-      }]
-    }
-  end
-%>

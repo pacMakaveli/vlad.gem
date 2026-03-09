@@ -33,36 +33,3 @@
   </div>
 <% end %>
 
-<%
-  def chart_data_for_hourly(heatmap)
-    {
-      labels: heatmap.map { |h| "#{h[:hour]}:00" },
-      datasets: [{
-        label: 'Messages',
-        data: heatmap.map { |h| h[:messages] },
-        backgroundColor: 'rgba(147, 51, 234, 0.6)',
-        borderColor: 'rgb(147, 51, 234)',
-        borderWidth: 1
-      }]
-    }
-  end
-
-  def chart_data_for_day_of_week(day_data)
-    # Sort by day of week (Sunday = 0)
-    day_order = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
-    sorted_data = day_order.map do |day|
-      [ day, day_data.find { |d, _| d == day }&.last || 0 ]
-    end
-
-    {
-      labels: sorted_data.map(&:first),
-      datasets: [{
-        label: 'Messages',
-        data: sorted_data.map(&:last),
-        backgroundColor: 'rgba(59, 130, 246, 0.6)',
-        borderColor: 'rgb(59, 130, 246)',
-        borderWidth: 1
-      }]
-    }
-  end
-%>

@@ -38,27 +38,3 @@
   </div>
 <% end %>
 
-<%
-  def chart_data_for_initiations(trend)
-    # Extract participant names from the first data point
-    return {} if trend.empty?
-
-    participant_ids = trend.first[:initiations].keys
-    participant_names = Participant.where(id: participant_ids).pluck(:id, :name).to_h
-
-    datasets = participant_ids.map do |pid|
-      {
-        label: participant_names[pid] || "Unknown",
-        data: trend.map { |t| t[:initiations][pid] || 0 },
-        backgroundColor: pid.even? ? 'rgba(147, 51, 234, 0.6)' : 'rgba(59, 130, 246, 0.6)',
-        borderColor: pid.even? ? 'rgb(147, 51, 234)' : 'rgb(59, 130, 246)',
-        borderWidth: 1
-      }
-    end
-
-    {
-      labels: trend.map { |t| t[:date].strftime("%b %d") },
-      datasets: datasets
-    }
-  end
-%>

@@ -61,4 +61,112 @@ module ApplicationHelper
       "#{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
     end
   end
+
+  # Chart data helpers
+  def chart_data_for_volume(trend)
+    {
+      labels: trend.map { |d| d[:date].strftime("%b %d") },
+      datasets: [{
+        label: "Messages",
+        data: trend.map { |d| d[:messages] },
+        borderColor: "rgb(147, 51, 234)",
+        backgroundColor: "rgba(147, 51, 234, 0.1)",
+        tension: 0.3
+      }]
+    }
+  end
+
+  def chart_data_for_hourly(heatmap)
+    {
+      labels: heatmap.map { |h| "#{h[:hour]}:00" },
+      datasets: [{
+        label: "Messages",
+        data: heatmap.map { |h| h[:messages] },
+        backgroundColor: "rgba(147, 51, 234, 0.6)",
+        borderColor: "rgb(147, 51, 234)",
+        borderWidth: 1
+      }]
+    }
+  end
+
+  def chart_data_for_rolling(engagement)
+    {
+      labels: engagement.map { |e| e[:end_date].strftime("%b %d") },
+      datasets: [{
+        label: "Messages (7-day avg)",
+        data: engagement.map { |e| e[:total_messages] },
+        borderColor: "rgb(147, 51, 234)",
+        backgroundColor: "rgba(147, 51, 234, 0.1)",
+        tension: 0.3
+      }]
+    }
+  end
+
+  def chart_data_for_sentiment(trend)
+    {
+      labels: trend.map { |d| d[:date].strftime("%b %d") },
+      datasets: [{
+        label: "Sentiment Score",
+        data: trend.map { |d| d[:sentiment] },
+        borderColor: "rgb(147, 51, 234)",
+        backgroundColor: "rgba(147, 51, 234, 0.1)",
+        tension: 0.3,
+        fill: true
+      }]
+    }
+  end
+
+  def chart_data_for_response_time(trend)
+    {
+      labels: trend.map { |d| d[:date].strftime("%b %d") },
+      datasets: [{
+        label: "Avg Response Time (minutes)",
+        data: trend.map { |d| (d[:avg_response_time] || 0) / 60.0 },
+        borderColor: "rgb(59, 130, 246)",
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        tension: 0.3,
+        fill: true
+      }]
+    }
+  end
+
+  def chart_data_for_day_of_week(day_data)
+    day_order = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
+    sorted_data = day_order.map do |day|
+      [ day, day_data.find { |d, _| d == day }&.last || 0 ]
+    end
+
+    {
+      labels: sorted_data.map(&:first),
+      datasets: [{
+        label: "Messages",
+        data: sorted_data.map(&:last),
+        backgroundColor: "rgba(59, 130, 246, 0.6)",
+        borderColor: "rgb(59, 130, 246)",
+        borderWidth: 1
+      }]
+    }
+  end
+
+  def chart_data_for_initiations(trend)
+    return {} if trend.empty?
+
+    participant_ids = trend.first[:initiations].keys
+    participant_names = Participant.where(id: participant_ids).pluck(:id, :name).to_h
+
+    datasets = participant_ids.map do |pid|
+      {
+        label: participant_names[pid] || "Unknown",
+        data: trend.map { |t| t[:initiations][pid] || 0 },
+        backgroundColor: pid.even? ? "rgba(147, 51, 234, 0.6)" : "rgba(59, 130, 246, 0.6)",
+        borderColor: pid.even? ? "rgb(147, 51, 234)" : "rgb(59, 130, 246)",
+        borderWidth: 1
+      }
+    end
+
+    {
+      labels: trend.map { |t| t[:date].strftime("%b %d") },
+      datasets: datasets
+    }
+  end
 end
