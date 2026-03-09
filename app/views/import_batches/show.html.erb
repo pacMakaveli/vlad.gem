@@ -1,0 +1,74 @@
+<% content_for :title, "Import Details - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to Imports", conversation_import_batches_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<h1 class="text-3xl font-bold text-gray-900 mb-2">Import Details</h1>
+<p class="text-gray-600 mb-8"><%= @import_batch.filename %></p>
+
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div>
+      <div class="text-sm text-gray-500 mb-1">Status</div>
+      <% case @import_batch.status %>
+      <% when "completed" %>
+        <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Completed</span>
+      <% when "processing" %>
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Processing</span>
+      <% when "pending" %>
+        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-full">Pending</span>
+      <% when "failed" %>
+        <span class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Failed</span>
+      <% end %>
+    </div>
+
+    <div>
+      <div class="text-sm text-gray-500 mb-1">Imported</div>
+      <div class="text-2xl font-bold text-gray-900"><%= @import_batch.messages_imported %></div>
+    </div>
+
+    <div>
+      <div class="text-sm text-gray-500 mb-1">Skipped</div>
+      <div class="text-2xl font-bold text-gray-900"><%= @import_batch.messages_skipped %></div>
+    </div>
+
+    <div>
+      <div class="text-sm text-gray-500 mb-1">New Messages</div>
+      <div class="text-2xl font-bold text-green-600"><%= @import_batch.new_messages_count %></div>
+    </div>
+  </div>
+
+  <% if @import_batch.error_message.present? %>
+    <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded">
+      <p class="text-sm text-red-800">
+        <strong>Error:</strong> <%= @import_batch.error_message %>
+      </p>
+    </div>
+  <% end %>
+</div>
+
+<% if @import_batch.status == "completed" && @new_messages.any? %>
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">
+      New Messages in This Import (<%= @new_messages.count %>)
+    </h2>
+    <div class="space-y-4">
+      <% @new_messages.limit(50).each do |message| %>
+        <div class="border-l-4 <%= participant_color(message.participant) %> pl-4 py-2">
+          <div class="flex items-start justify-between mb-1">
+            <span class="font-medium text-gray-900"><%= message.participant.name %></span>
+            <span class="text-sm text-gray-500"><%= message.sent_at.strftime("%b %d, %Y %I:%M %p") %></span>
+          </div>
+          <p class="text-gray-700"><%= truncate(message.content, length: 200) %></p>
+        </div>
+      <% end %>
+
+      <% if @new_messages.count > 50 %>
+        <p class="text-sm text-gray-500 text-center pt-4">
+          Showing first 50 of <%= @new_messages.count %> new messages
+        </p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

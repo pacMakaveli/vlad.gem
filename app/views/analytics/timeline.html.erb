@@ -1,0 +1,59 @@
+<% content_for :title, "Timeline - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to #{@conversation.title}", conversation_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<h1 class="text-3xl font-bold text-gray-900 mb-2">Timeline</h1>
+<p class="text-gray-600 mb-8">Full chronological message view</p>
+
+<% if @messages.any? %>
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="space-y-6">
+      <% @messages.each do |message| %>
+        <div class="border-l-4 <%= participant_color(message.participant) %> pl-4 py-2">
+          <div class="flex items-start justify-between mb-1">
+            <div>
+              <span class="font-medium text-gray-900"><%= message.participant.name %></span>
+              <% if message.sentiment_label %>
+                <span class="ml-2 inline-block text-xs px-2 py-1 rounded <%= sentiment_badge_color(message.sentiment_label) %>">
+                  <%= message.sentiment_label %>
+                </span>
+              <% end %>
+            </div>
+            <span class="text-sm text-gray-500"><%= message.sent_at.strftime("%b %d, %Y %I:%M %p") %></span>
+          </div>
+
+          <% if message.message_type == "text" %>
+            <p class="text-gray-700 whitespace-pre-wrap"><%= message.content %></p>
+          <% elsif message.message_type == "media" %>
+            <p class="text-gray-500 italic">
+              <%= message.media_type&.capitalize || "Media" %> <%= message.content %>
+            </p>
+          <% elsif message.message_type == "system" %>
+            <p class="text-gray-400 text-sm italic"><%= message.content %></p>
+          <% elsif message.message_type == "deleted" %>
+            <p class="text-gray-400 text-sm italic">This message was deleted</p>
+          <% end %>
+
+          <% if message.audio_transcript&.transcript_text.present? %>
+            <div class="mt-2 p-2 bg-blue-50 rounded text-sm">
+              <strong class="text-blue-900">Transcript:</strong>
+              <p class="text-blue-800"><%= message.audio_transcript.transcript_text %></p>
+            </div>
+          <% end %>
+
+          <% if message.response_time_seconds %>
+            <div class="mt-1 text-xs text-gray-400">
+              Response time: <%= format_duration(message.response_time_seconds) %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <p class="text-gray-500">No messages found</p>
+  </div>
+<% end %>

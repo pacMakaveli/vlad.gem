@@ -1,0 +1,64 @@
+<% content_for :title, "Response Drift - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to #{@conversation.title}", conversation_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<h1 class="text-3xl font-bold text-gray-900 mb-2">Response Drift</h1>
+<p class="text-gray-600 mb-8">How response patterns change over time</p>
+
+<!-- Average Response Times by Participant -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="text-xl font-semibold text-gray-900 mb-4">Average Response Times</h2>
+  <div class="space-y-4">
+    <% @response_times.each do |data| %>
+      <div class="flex items-center justify-between p-4 bg-gray-50 rounded">
+        <span class="font-medium text-gray-900"><%= data[:participant] %></span>
+        <div class="text-right">
+          <div class="text-2xl font-bold text-gray-900"><%= data[:avg_response_time_formatted] %></div>
+          <div class="text-sm text-gray-500">avg response time</div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Initiation Trends -->
+<% if @initiation_trend.any? %>
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Who Starts Conversations</h2>
+    <p class="text-sm text-gray-500 mb-4">Conversation initiations over the last 60 days</p>
+    <div style="height: 300px;">
+      <canvas
+        data-controller="chart"
+        data-chart-type-value="bar"
+        data-chart-data-value='<%= chart_data_for_initiations(@initiation_trend).to_json %>'
+      ></canvas>
+    </div>
+  </div>
+<% end %>
+
+<%
+  def chart_data_for_initiations(trend)
+    # Extract participant names from the first data point
+    return {} if trend.empty?
+
+    participant_ids = trend.first[:initiations].keys
+    participant_names = Participant.where(id: participant_ids).pluck(:id, :name).to_h
+
+    datasets = participant_ids.map do |pid|
+      {
+        label: participant_names[pid] || "Unknown",
+        data: trend.map { |t| t[:initiations][pid] || 0 },
+        backgroundColor: pid.even? ? 'rgba(147, 51, 234, 0.6)' : 'rgba(59, 130, 246, 0.6)',
+        borderColor: pid.even? ? 'rgb(147, 51, 234)' : 'rgb(59, 130, 246)',
+        borderWidth: 1
+      }
+    end
+
+    {
+      labels: trend.map { |t| t[:date].strftime("%b %d") },
+      datasets: datasets
+    }
+  end
+%>

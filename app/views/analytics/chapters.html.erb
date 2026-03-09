@@ -1,0 +1,81 @@
+<% content_for :title, "Chapters - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to #{@conversation.title}", conversation_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<h1 class="text-3xl font-bold text-gray-900 mb-2">Chapters</h1>
+<p class="text-gray-600 mb-8">Distinct phases and periods in your conversation</p>
+
+<% if @chapters.any? %>
+  <div class="space-y-6">
+    <% @chapters.each_with_index do |chapter, index| %>
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-semibold text-gray-900">
+              Chapter <%= index + 1 %>
+              <% if chapter.title.present? %>
+                - <%= chapter.title %>
+              <% end %>
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">
+              <%= format_date_range(chapter.start_date, chapter.end_date) %>
+            </p>
+          </div>
+          <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">
+            <%= chapter.detection_method == "auto" ? "Auto-detected" : "Manual" %>
+          </span>
+        </div>
+
+        <% if chapter.description.present? %>
+          <p class="text-gray-700 mb-4"><%= chapter.description %></p>
+        <% end %>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <div class="text-sm text-gray-500">Messages</div>
+            <div class="text-2xl font-semibold text-gray-900"><%= chapter.message_count %></div>
+          </div>
+
+          <div>
+            <div class="text-sm text-gray-500">Duration</div>
+            <div class="text-2xl font-semibold text-gray-900">
+              <%= (chapter.end_date - chapter.start_date).to_i + 1 %> days
+            </div>
+          </div>
+
+          <% if chapter.avg_sentiment %>
+            <div>
+              <div class="text-sm text-gray-500">Avg Sentiment</div>
+              <div class="text-2xl font-semibold <%= sentiment_color(chapter.avg_sentiment) %>">
+                <%= chapter.avg_sentiment.round(2) %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if chapter.characteristics.present? && chapter.characteristics["avg_messages_per_day"] %>
+            <div>
+              <div class="text-sm text-gray-500">Msgs/Day</div>
+              <div class="text-2xl font-semibold text-gray-900">
+                <%= chapter.characteristics["avg_messages_per_day"] %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <% if chapter.dominant_theme.present? %>
+          <div class="mt-4 pt-4 border-t">
+            <span class="text-sm text-gray-500">Theme: </span>
+            <span class="font-medium text-gray-900"><%= chapter.dominant_theme %></span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <p class="text-gray-500 mb-4">No chapters detected yet</p>
+    <p class="text-sm text-gray-400">Chapters will be automatically detected based on conversation gaps</p>
+  </div>
+<% end %>
