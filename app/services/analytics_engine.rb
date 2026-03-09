@@ -127,18 +127,27 @@ class AnalyticsEngine
 
   # Get conversation summary stats
   def summary_stats
+    days = if conversation.first_message_at && conversation.last_message_at
+      ((conversation.last_message_at - conversation.first_message_at) / 1.day).to_i
+    else
+      0
+    end
+
     {
       total_messages: conversation.total_messages_count,
       date_range: {
         start: conversation.first_message_at,
         end: conversation.last_message_at,
-        days: ((conversation.last_message_at - conversation.first_message_at) / 1.day).to_i
+        days: days
       },
       participants: conversation.participants.map do |p|
+        total_count = conversation.total_messages_count
+        percentage = total_count > 0 ? (p.messages.count.to_f / total_count * 100).round(1) : 0
+
         {
           name: p.name,
           message_count: p.messages.count,
-          percentage: (p.messages.count.to_f / conversation.total_messages_count * 100).round(1)
+          percentage: percentage
         }
       end,
       avg_sentiment: conversation.messages.where.not(sentiment_score: nil)
