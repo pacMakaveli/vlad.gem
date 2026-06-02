@@ -1,728 +1,441 @@
-<% content_for :title, "Vlad's Gem 💎 - Relationship Intelligence for WhatsApp" %>
+<% content_for :title, "Vlad's Gem 💎 - Your Relationship, Visualized" %>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
   
   * {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
   }
 
-  /* Ultra-smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Remove default padding from main container */
   body > nav + div {
     padding: 0 !important;
   }
 
-  /* Advanced Animations */
-  @keyframes float-slow {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    33% { transform: translate(30px, -30px) rotate(5deg); }
-    66% { transform: translate(-20px, 20px) rotate(-5deg); }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
   }
 
-  @keyframes particle-float {
-    0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+  @keyframes bounce-in {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
   }
 
-  @keyframes gradient-xy {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  @keyframes slide-up {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
 
-  @keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
+  .emoji-float {
+    animation: wiggle 2s ease-in-out infinite;
   }
 
-  @keyframes scale-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+  .pop-in {
+    animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 
-  @keyframes text-shimmer {
-    0% { background-position: -500px 0; }
-    100% { background-position: 500px 0; }
-  }
-
-  /* Particle system */
-  .particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    animation: particle-float linear infinite;
-  }
-
-  .particle:nth-child(1) { left: 10%; animation-duration: 15s; animation-delay: 0s; }
-  .particle:nth-child(2) { left: 20%; animation-duration: 20s; animation-delay: 2s; }
-  .particle:nth-child(3) { left: 30%; animation-duration: 18s; animation-delay: 4s; }
-  .particle:nth-child(4) { left: 40%; animation-duration: 22s; animation-delay: 1s; }
-  .particle:nth-child(5) { left: 50%; animation-duration: 16s; animation-delay: 3s; }
-  .particle:nth-child(6) { left: 60%; animation-duration: 19s; animation-delay: 5s; }
-  .particle:nth-child(7) { left: 70%; animation-duration: 21s; animation-delay: 2s; }
-  .particle:nth-child(8) { left: 80%; animation-duration: 17s; animation-delay: 4s; }
-  .particle:nth-child(9) { left: 90%; animation-duration: 23s; animation-delay: 1s; }
-
-  /* Hero gradient */
-  .mega-gradient {
-    background: linear-gradient(135deg, 
-      #667eea 0%, 
-      #764ba2 25%, 
-      #f093fb 50%, 
-      #4facfe 75%, 
-      #00f2fe 100%
-    );
-    background-size: 400% 400%;
-    animation: gradient-xy 15s ease infinite;
-  }
-
-  /* Glass morphism pro */
-  .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  /* Text gradient */
-  .text-glow {
-    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradient-xy 8s ease infinite;
-  }
-
-  /* Shimmer effect */
-  .shimmer {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 100%
-    );
-    background-size: 1000px 100%;
-    animation: shimmer 3s infinite;
-  }
-
-  /* 3D Card Effect */
-  .card-3d {
-    transform-style: preserve-3d;
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
-  }
-
-  .card-3d:hover {
-    transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
-  }
-
-  /* Magnetic button effect */
-  .magnetic-btn {
-    position: relative;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-  }
-
-  .magnetic-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
-  }
-
-  /* Bento grid */
-  .bento-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
-
-  .bento-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 2rem;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-  }
-
-  .bento-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-  }
-
-  .bento-tall { grid-row: span 2; }
-  .bento-wide { grid-column: span 2; }
-
-  /* Noise texture */
-  .noise {
-    position: absolute;
-    inset: 0;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
-
-  /* Spotlight effect */
-  .spotlight {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.6;
-    pointer-events: none;
-    animation: float-slow 20s ease-in-out infinite;
-  }
-
-  /* Scroll reveal */
-  .scroll-reveal {
+  .slide-up {
+    animation: slide-up 0.8s ease-out forwards;
     opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
   }
 
-  .scroll-reveal.revealed {
-    opacity: 1;
-    transform: translateY(0);
+  .fun-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
 
-  /* Premium pricing card */
-  .pricing-premium {
-    position: relative;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    transform: scale(1.08) translateY(-20px);
-    z-index: 10;
+  .data-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .pricing-premium::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: inherit;
-    padding: 2px;
-    background: linear-gradient(135deg, #f093fb, #667eea);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0.5;
+  .data-card:hover {
+    transform: translateY(-8px) rotate(-2deg);
   }
 
-  @media (max-width: 768px) {
-    .bento-grid {
-      grid-template-columns: 1fr;
-    }
-    .bento-tall, .bento-wide {
-      grid-row: span 1;
-      grid-column: span 1;
-    }
+  .screenshot-frame {
+    border: 8px solid #1a1a1a;
+    border-radius: 32px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
   }
 </style>
 
-<!-- Hero Section - Next Level -->
-<div class="relative min-h-screen flex items-center justify-center overflow-hidden mega-gradient">
-  <!-- Particle system -->
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-
-  <!-- Spotlights -->
-  <div class="spotlight bg-purple-400" style="top: 10%; left: 10%;"></div>
-  <div class="spotlight bg-pink-400" style="top: 60%; right: 10%; animation-delay: 5s;"></div>
-  <div class="spotlight bg-blue-400" style="bottom: 10%; left: 50%; animation-delay: 10s;"></div>
-
-  <!-- Noise texture -->
-  <div class="noise"></div>
-
-  <!-- Content -->
-  <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-    <!-- Badge -->
-    <div class="inline-block mb-8 scroll-reveal revealed">
-      <div class="glass px-6 py-3 rounded-full text-white text-sm font-semibold border border-white/20">
-        <span class="inline-block w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-        Revolutionizing Relationship Analytics
-      </div>
+<!-- Hero - Fun & Playful -->
+<div class="fun-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"10\" y=\"40\" font-size=\"40\">💎</text></svg>'); background-size: 120px;"></div>
+  
+  <div class="max-w-6xl mx-auto px-6 py-20 text-center relative z-10">
+    <div class="mb-6">
+      <span class="inline-block text-8xl emoji-float">💎</span>
     </div>
-
-    <!-- Main heading with dramatic typography -->
-    <h1 class="scroll-reveal revealed" style="animation-delay: 0.1s;">
-      <div class="text-white/90 text-xl md:text-2xl font-light mb-4 tracking-wide">
-        INTRODUCING
-      </div>
-      <div class="text-7xl md:text-9xl font-black text-white mb-6 leading-none tracking-tight">
-        Vlad's Gem
-      </div>
-      <div class="text-8xl md:text-9xl mb-8 scale-pulse">
-        💎
-      </div>
+    
+    <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-tight pop-in">
+      Your Relationship,<br/>
+      <span class="text-yellow-300">Visualized</span>
     </h1>
 
-    <!-- Subheading -->
-    <p class="text-2xl md:text-5xl font-bold text-white mb-6 leading-tight scroll-reveal revealed" style="animation-delay: 0.2s;">
-      Your Relationships,<br/>
-      <span class="text-yellow-300">Decoded</span>
+    <p class="text-2xl md:text-3xl text-white/90 mb-4 font-medium slide-up" style="animation-delay: 0.2s;">
+      Like Spotify Wrapped, but for your WhatsApp chats
     </p>
 
-    <p class="text-lg md:text-2xl text-white/80 max-w-4xl mx-auto mb-12 font-light leading-relaxed scroll-reveal revealed" style="animation-delay: 0.3s;">
-      Transform WhatsApp conversations into stunning visual insights.<br class="hidden md:block"/>
-      Discover patterns, emotions, and stories hidden in every message.
+    <p class="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto slide-up" style="animation-delay: 0.3s;">
+      Upload. Analyze. Orgasm on data. 📊✨
     </p>
 
-    <!-- CTA Buttons -->
-    <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16 scroll-reveal revealed" style="animation-delay: 0.4s;">
-      <%= link_to dashboard_path, class: "magnetic-btn group px-12 py-6 bg-white text-purple-600 rounded-2xl text-xl font-bold inline-flex items-center justify-center gap-3 shadow-2xl" do %>
-        <span>Start Free</span>
-        <svg class="w-6 h-6 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-        </svg>
-      <% end %>
+    <%= link_to dashboard_path, class: "inline-block bg-white text-purple-600 px-12 py-5 rounded-full text-2xl font-bold hover:scale-110 transition-transform shadow-2xl slide-up", style: "animation-delay: 0.4s;" do %>
+      Start Your Journey →
+    <% end %>
 
-      <a href="#demo" class="glass px-12 py-6 rounded-2xl text-xl font-bold text-white inline-flex items-center justify-center gap-3 hover:bg-white/10 transition-all">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <span>Watch Demo</span>
-      </a>
-    </div>
-
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto scroll-reveal revealed" style="animation-delay: 0.5s;">
-      <div class="glass p-6 rounded-2xl backdrop-blur-xl">
-        <div class="text-5xl font-black text-white mb-2">100K+</div>
-        <div class="text-white/70 text-sm uppercase tracking-wider">Messages Analyzed</div>
-      </div>
-      <div class="glass p-6 rounded-2xl backdrop-blur-xl">
-        <div class="text-5xl font-black text-white mb-2">7</div>
-        <div class="text-white/70 text-sm uppercase tracking-wider">Analytics Views</div>
-      </div>
-      <div class="glass p-6 rounded-2xl backdrop-blur-xl">
-        <div class="text-5xl font-black text-white mb-2">100%</div>
-        <div class="text-white/70 text-sm uppercase tracking-wider">Private</div>
-      </div>
-      <div class="glass p-6 rounded-2xl backdrop-blur-xl">
-        <div class="text-5xl font-black text-white mb-2">&lt;60s</div>
-        <div class="text-white/70 text-sm uppercase tracking-wider">Setup Time</div>
-      </div>
-    </div>
+    <p class="mt-6 text-white/60 text-sm slide-up" style="animation-delay: 0.5s;">
+      Free forever • No signup • 2 mins setup
+    </p>
   </div>
+</div>
 
-  <!-- Scroll indicator -->
-  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
-    <div class="flex flex-col items-center gap-2 text-white/70 animate-bounce">
-      <span class="text-sm uppercase tracking-wider">Scroll to explore</span>
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-      </svg>
+<!-- What You'll Discover -->
+<div class="bg-gray-50 py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      What You'll Discover 🔍
+    </h2>
+    <p class="text-xl text-center text-gray-600 mb-16">
+      Turn thousands of messages into beautiful insights
+    </p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Mood Shifts -->
+      <div class="data-card bg-gradient-to-br from-pink-500 to-rose-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">😊😢😍</div>
+        <h3 class="text-3xl font-bold mb-3">Mood Shifts</h3>
+        <p class="text-white/90 text-lg">
+          Watch emotions evolve over time. See the exact moment things got weird.
+        </p>
+      </div>
+
+      <!-- Life Chapters -->
+      <div class="data-card bg-gradient-to-br from-purple-500 to-indigo-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">📖</div>
+        <h3 class="text-3xl font-bold mb-3">Life Chapters</h3>
+        <p class="text-white/90 text-lg">
+          AI detects phases: honeymoon, crisis, comeback. Your relationship's story arc.
+        </p>
+      </div>
+
+      <!-- Emoji Madness -->
+      <div class="data-card bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">🤣🔥💀</div>
+        <h3 class="text-3xl font-bold mb-3">Emoji Analysis</h3>
+        <p class="text-white/90 text-lg">
+          Most used emoji? Favorite GIF? We count EVERYTHING.
+        </p>
+      </div>
+
+      <!-- Response Patterns -->
+      <div class="data-card bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">⏱️</div>
+        <h3 class="text-3xl font-bold mb-3">Response Times</h3>
+        <p class="text-white/90 text-lg">
+          Who leaves who on read? How fast do you reply? The tea is HOT.
+        </p>
+      </div>
+
+      <!-- Activity Patterns -->
+      <div class="data-card bg-gradient-to-br from-green-500 to-emerald-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">🌙☀️</div>
+        <h3 class="text-3xl font-bold mb-3">When You Chat</h3>
+        <p class="text-white/90 text-lg">
+          3am texts? Lunchtime conversations? Heatmaps show your rhythm.
+        </p>
+      </div>
+
+      <!-- Message Volume -->
+      <div class="data-card bg-gradient-to-br from-red-500 to-pink-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">📈</div>
+        <h3 class="text-3xl font-bold mb-3">The Numbers</h3>
+        <p class="text-white/90 text-lg">
+          100K messages analyzed. Every. Single. Word. Counted.
+        </p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Bento Grid Section - Features -->
-<div class="bg-gray-950 py-32 relative overflow-hidden">
-  <div class="noise"></div>
-  
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <!-- Section header -->
-    <div class="text-center mb-20 scroll-reveal">
-      <h2 class="text-6xl md:text-8xl font-black text-glow mb-6">
-        Seven Views.<br/>Infinite Insights.
-      </h2>
-      <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto">
-        Each analytics view tells a different part of your story
-      </p>
-    </div>
+<!-- How It Works - Super Simple -->
+<div class="bg-white py-24">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      Dead Simple Setup 🚀
+    </h2>
+    <p class="text-xl text-center text-gray-600 mb-16">
+      Seriously, your grandma could do this
+    </p>
 
-    <!-- Bento Grid -->
-    <div class="bento-grid">
-      <!-- Timeline - Tall -->
-      <div class="bento-item bento-tall card-3d bg-gradient-to-br from-purple-600 to-pink-600 p-8 scroll-reveal group">
-        <div class="relative z-10 h-full flex flex-col">
-          <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-4xl font-black text-white mb-4">Timeline</h3>
-          <p class="text-white/90 text-lg leading-relaxed flex-grow">
-            Journey through every message chronologically. See sentiment shifts, detect patterns, and relive your conversation history.
+    <div class="space-y-12">
+      <div class="flex items-start gap-6">
+        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+          1
+        </div>
+        <div>
+          <h3 class="text-3xl font-bold mb-2">Export your chat</h3>
+          <p class="text-xl text-gray-600">
+            Open WhatsApp → Pick a chat → More → Export Chat → <strong>Without Media</strong><br/>
+            <span class="text-sm text-gray-500">(We don't need your 2,000 cat pics)</span>
           </p>
-          <div class="mt-6 text-white/60 text-sm uppercase tracking-wider">View Details →</div>
         </div>
       </div>
 
-      <!-- Pulse -->
-      <div class="bento-item card-3d bg-gradient-to-br from-blue-600 to-cyan-600 p-8 scroll-reveal group">
-        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-          </svg>
+      <div class="flex items-start gap-6">
+        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+          2
         </div>
-        <h3 class="text-3xl font-black text-white mb-3">Pulse</h3>
-        <p class="text-white/90 leading-relaxed">Volume trends and engagement metrics over time</p>
-      </div>
-
-      <!-- Shift -->
-      <div class="bento-item card-3d bg-gradient-to-br from-green-600 to-emerald-600 p-8 scroll-reveal group">
-        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <h3 class="text-3xl font-black text-white mb-3">Shift</h3>
-        <p class="text-white/90 leading-relaxed">Watch emotions evolve with sentiment analysis</p>
-      </div>
-
-      <!-- Response Drift - Wide -->
-      <div class="bento-item bento-wide card-3d bg-gradient-to-br from-orange-600 to-red-600 p-8 scroll-reveal group">
-        <div class="flex items-start gap-6">
-          <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-4xl font-black text-white mb-4">Response Drift</h3>
-            <p class="text-white/90 text-lg leading-relaxed">
-              Understand response patterns, initiation behaviors, and how your communication dynamics change over weeks and months.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Daily Rhythm -->
-      <div class="bento-item card-3d bg-gradient-to-br from-indigo-600 to-purple-600 p-8 scroll-reveal group">
-        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-          </svg>
-        </div>
-        <h3 class="text-3xl font-black text-white mb-3">Daily Rhythm</h3>
-        <p class="text-white/90 leading-relaxed">Heatmaps show when you chat most</p>
-      </div>
-
-      <!-- Daily Breakdown - Tall -->
-      <div class="bento-item bento-tall card-3d bg-gradient-to-br from-pink-600 to-rose-600 p-8 scroll-reveal group">
-        <div class="relative z-10 h-full flex flex-col">
-          <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-            </svg>
-          </div>
-          <h3 class="text-4xl font-black text-white mb-4">Daily Breakdown</h3>
-          <p class="text-white/90 text-lg leading-relaxed flex-grow">
-            Granular hour-by-hour breakdown for every single day. See exactly when conversations happen.
+        <div>
+          <h3 class="text-3xl font-bold mb-2">Upload it here</h3>
+          <p class="text-xl text-gray-600">
+            Drag & drop the .txt file. That's it. We handle the rest.
           </p>
-          <div class="mt-6 text-white/60 text-sm uppercase tracking-wider">Explore →</div>
         </div>
       </div>
 
-      <!-- Chapters -->
-      <div class="bento-item card-3d bg-gradient-to-br from-yellow-600 to-orange-600 p-8 scroll-reveal group">
-        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-          </svg>
+      <div class="flex items-start gap-6">
+        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+          3
         </div>
-        <h3 class="text-3xl font-black text-white mb-3">Chapters</h3>
-        <p class="text-white/90 leading-relaxed">AI-detected relationship phases</p>
+        <div>
+          <h3 class="text-3xl font-bold mb-2">Explore & share</h3>
+          <p class="text-xl text-gray-600">
+            Beautiful charts. Juicy insights. Screenshot-worthy stats. Go nuts.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 text-center">
+      <%= link_to "Try It Now →", dashboard_path, class: "inline-block bg-purple-600 text-white px-12 py-5 rounded-full text-2xl font-bold hover:bg-purple-700 transition-all shadow-xl" %>
+    </div>
+  </div>
+</div>
+
+<!-- Features Showcase -->
+<div class="bg-gray-900 text-white py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      The Good Stuff 🎁
+    </h2>
+    <p class="text-xl text-center text-gray-400 mb-16">
+      Everything you get (for free, btw)
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="border-l-4 border-purple-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">📊 Timeline View</h3>
+        <p class="text-gray-400 text-lg">
+          Scroll through your entire conversation history with sentiment indicators. Like a time machine, but with receipts.
+        </p>
       </div>
 
-      <!-- Smart Imports -->
-      <div class="bento-item card-3d bg-gradient-to-br from-teal-600 to-cyan-600 p-8 scroll-reveal group">
-        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-          </svg>
-        </div>
-        <h3 class="text-3xl font-black text-white mb-3">Smart Imports</h3>
-        <p class="text-white/90 leading-relaxed">Intelligent deduplication system</p>
+      <div class="border-l-4 border-blue-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">💓 Pulse Analytics</h3>
+        <p class="text-gray-400 text-lg">
+          Message volume over time. See when you were obsessed vs. when you ghosted each other.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-pink-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">😊 Sentiment Shift</h3>
+        <p class="text-gray-400 text-lg">
+          AI-powered emotion tracking. Watch the vibes change from 🥰 to 🙄 to 💀 in real-time.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-green-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">⏰ Response Drift</h3>
+        <p class="text-gray-400 text-lg">
+          Who texts first? Who responds faster? All the receipts, visualized beautifully.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-yellow-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">🌙 Daily Rhythm</h3>
+        <p class="text-gray-400 text-lg">
+          When do you actually talk? 3am vulnerability hours? Lunch break check-ins? We know.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-orange-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">📅 Daily Breakdown</h3>
+        <p class="text-gray-400 text-lg">
+          Hour-by-hour breakdown for every single day. For the true data nerds.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-red-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">📖 Chapters</h3>
+        <p class="text-gray-400 text-lg">
+          AI automatically detects relationship phases based on gaps and patterns. Your story, segmented.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-teal-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">🔄 Smart Imports</h3>
+        <p class="text-gray-400 text-lg">
+          Upload new exports anytime. We're smart enough to only add new messages. No duplicates, ever.
+        </p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- How It Works -->
-<div class="bg-white py-32">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-20 scroll-reveal">
-      <h2 class="text-6xl md:text-8xl font-black text-glow mb-6">
-        60 Second Setup
-      </h2>
-      <p class="text-xl md:text-2xl text-gray-600">Three steps. That's it.</p>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-12">
-      <div class="text-center scroll-reveal group">
-        <div class="relative inline-block mb-8">
-          <div class="w-40 h-40 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-7xl font-black text-white shadow-2xl group-hover:scale-110 transition-transform">
-            1
-          </div>
-          <div class="absolute -bottom-2 -right-2 w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center shadow-xl">
-            <svg class="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-        </div>
-        <h3 class="text-3xl font-black text-gray-900 mb-4">Export</h3>
-        <p class="text-xl text-gray-600 leading-relaxed">
-          WhatsApp → Chat → More → Export Chat → Without Media
-        </p>
-      </div>
-
-      <div class="text-center scroll-reveal group" style="animation-delay: 0.1s;">
-        <div class="relative inline-block mb-8">
-          <div class="w-40 h-40 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-7xl font-black text-white shadow-2xl group-hover:scale-110 transition-transform">
-            2
-          </div>
-          <div class="absolute -bottom-2 -right-2 w-16 h-16 bg-green-400 rounded-full flex items-center justify-center shadow-xl">
-            <svg class="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-            </svg>
-          </div>
-        </div>
-        <h3 class="text-3xl font-black text-gray-900 mb-4">Upload</h3>
-        <p class="text-xl text-gray-600 leading-relaxed">
-          Drop your .txt or .zip file. We handle the rest.
-        </p>
-      </div>
-
-      <div class="text-center scroll-reveal group" style="animation-delay: 0.2s;">
-        <div class="relative inline-block mb-8">
-          <div class="w-40 h-40 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-7xl font-black text-white shadow-2xl group-hover:scale-110 transition-transform">
-            3
-          </div>
-          <div class="absolute -bottom-2 -right-2 w-16 h-16 bg-purple-400 rounded-full flex items-center justify-center shadow-xl">
-            <svg class="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-        </div>
-        <h3 class="text-3xl font-black text-gray-900 mb-4">Discover</h3>
-        <p class="text-xl text-gray-600 leading-relaxed">
-          Explore insights you never knew existed.
-        </p>
-      </div>
-    </div>
+<!-- Privacy (Actually Important) -->
+<div class="bg-purple-50 py-24">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <div class="text-6xl mb-6">🔒</div>
+    <h2 class="text-5xl font-black mb-6">Your Data Stays Yours</h2>
+    <p class="text-2xl text-gray-700 mb-8 leading-relaxed">
+      Everything happens <strong>on your device</strong>. We don't store your messages. 
+      We can't read them. We won't sell them. Your secrets are safe.
+    </p>
+    <p class="text-lg text-gray-600">
+      Seriously. We're not trying to be creepy. Just fun.
+    </p>
   </div>
 </div>
 
-<!-- Pricing - Premium -->
-<div class="bg-gray-50 py-32">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-20 scroll-reveal">
-      <h2 class="text-6xl md:text-8xl font-black text-glow mb-6">
-        Simple Pricing
-      </h2>
-      <p class="text-xl md:text-2xl text-gray-600">Start free. Upgrade when you're ready.</p>
-    </div>
+<!-- Pricing - Keep It Real -->
+<div class="bg-white py-24">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      Pricing 💰
+    </h2>
+    <p class="text-xl text-center text-gray-600 mb-16">
+      (Spoiler: It's free)
+    </p>
 
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-3 gap-8">
       <!-- Free -->
-      <div class="bg-white rounded-3xl p-10 border-2 border-gray-200 hover:border-purple-300 transition-all hover:shadow-2xl scroll-reveal">
-        <div class="text-center mb-8">
-          <h3 class="text-3xl font-black text-gray-900 mb-4">Free</h3>
-          <div class="mb-4">
-            <span class="text-7xl font-black text-gray-900">$0</span>
-          </div>
-          <p class="text-gray-600">Forever</p>
-        </div>
-        <ul class="space-y-4 mb-10">
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-gray-700">1 conversation</span>
+      <div class="border-4 border-gray-200 rounded-3xl p-8 hover:border-purple-500 transition-all">
+        <h3 class="text-3xl font-black mb-4">Free</h3>
+        <div class="text-6xl font-black mb-6">$0</div>
+        <ul class="space-y-3 mb-8 text-lg">
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>1 conversation</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-gray-700">10K messages</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>10K messages</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-gray-700">All analytics</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>All features</span>
           </li>
         </ul>
-        <%= link_to "Start Free", dashboard_path, class: "block w-full bg-gray-900 text-white px-8 py-5 rounded-2xl text-lg font-bold hover:bg-gray-800 transition text-center" %>
+        <%= link_to "Start Now", dashboard_path, class: "block w-full bg-gray-900 text-white py-4 rounded-full text-lg font-bold hover:bg-gray-800 transition text-center" %>
       </div>
 
-      <!-- Pro - Premium -->
-      <div class="pricing-premium rounded-3xl p-10 relative shadow-2xl scroll-reveal" style="animation-delay: 0.1s;">
-        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-          <div class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-full text-sm font-black shadow-xl uppercase tracking-wide">
-            ⭐ Most Popular
-          </div>
+      <!-- Pro -->
+      <div class="border-4 border-purple-600 rounded-3xl p-8 relative transform scale-105 shadow-xl">
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold">
+          COMING SOON
         </div>
-        <div class="text-center mb-8 relative z-10">
-          <h3 class="text-3xl font-black text-white mb-4">Pro</h3>
-          <div class="mb-4">
-            <span class="text-7xl font-black text-white">TBC</span>
-          </div>
-          <p class="text-white/80">Per month</p>
-        </div>
-        <ul class="space-y-4 mb-10 relative z-10">
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-white">Unlimited conversations</span>
+        <h3 class="text-3xl font-black mb-4">Pro</h3>
+        <div class="text-6xl font-black mb-6">TBC</div>
+        <ul class="space-y-3 mb-8 text-lg">
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Unlimited convos</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-white">Unlimited messages</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Unlimited messages</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-white">Audio transcription</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Audio transcription</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-white">PDF exports</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Export as PDF</span>
           </li>
         </ul>
-        <a href="#" class="block w-full bg-white text-purple-600 px-8 py-5 rounded-2xl text-lg font-bold hover:bg-gray-100 transition text-center relative z-10">
+        <button class="block w-full bg-purple-600 text-white py-4 rounded-full text-lg font-bold opacity-50 cursor-not-allowed text-center">
           Coming Soon
-        </a>
+        </button>
       </div>
 
       <!-- Enterprise -->
-      <div class="bg-white rounded-3xl p-10 border-2 border-gray-200 hover:border-purple-300 transition-all hover:shadow-2xl scroll-reveal" style="animation-delay: 0.2s;">
-        <div class="text-center mb-8">
-          <h3 class="text-3xl font-black text-gray-900 mb-4">Enterprise</h3>
-          <div class="mb-4">
-            <span class="text-7xl font-black text-gray-900">TBC</span>
-          </div>
-          <p class="text-gray-600">Custom</p>
-        </div>
-        <ul class="space-y-4 mb-10">
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-gray-700">Everything in Pro</span>
+      <div class="border-4 border-gray-200 rounded-3xl p-8 hover:border-purple-500 transition-all">
+        <h3 class="text-3xl font-black mb-4">Enterprise</h3>
+        <div class="text-6xl font-black mb-6">TBC</div>
+        <ul class="space-y-3 mb-8 text-lg">
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Everything in Pro</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-gray-700">Team collaboration</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Team features</span>
           </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="text-lg text-gray-700">Self-hosted</span>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Self-hosted option</span>
           </li>
         </ul>
-        <a href="#" class="block w-full bg-gray-900 text-white px-8 py-5 rounded-2xl text-lg font-bold hover:bg-gray-800 transition text-center">
-          Contact Sales
+        <a href="#" class="block w-full bg-gray-900 text-white py-4 rounded-full text-lg font-bold hover:bg-gray-800 transition text-center">
+          Contact Us
         </a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Final CTA -->
-<div class="mega-gradient py-32 relative overflow-hidden">
-  <div class="noise"></div>
-  <div class="spotlight bg-purple-400" style="top: 20%; left: 20%;"></div>
-  <div class="spotlight bg-pink-400" style="bottom: 20%; right: 20%; animation-delay: 5s;"></div>
-
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-    <h2 class="text-6xl md:text-8xl font-black text-white mb-8 leading-tight scroll-reveal">
-      Ready to Decode<br/>Your Story?
+<!-- Final CTA - Let's Go -->
+<div class="fun-gradient py-32 text-center">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-6xl md:text-8xl font-black text-white mb-8 leading-tight">
+      Ready to Dive In? 🏊‍♂️
     </h2>
-    <p class="text-2xl md:text-3xl text-white/90 mb-12 font-light scroll-reveal" style="animation-delay: 0.1s;">
-      Join thousands discovering insights in their relationships
+    <p class="text-2xl text-white/90 mb-12">
+      Your relationship data is waiting. Let's make it beautiful.
     </p>
-    <%= link_to dashboard_path, class: "magnetic-btn inline-flex items-center gap-3 px-16 py-7 text-2xl font-black text-purple-600 bg-white rounded-2xl shadow-2xl scroll-reveal", style: "animation-delay: 0.2s;" do %>
-      <span>Start Free Now</span>
-      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-      </svg>
-    <% end %>
-    <p class="mt-8 text-white/70 text-lg scroll-reveal" style="animation-delay: 0.3s;">
-      No credit card • Free forever • Setup in 60 seconds
+    <%= link_to "Analyze My Messages →", dashboard_path, class: "inline-block bg-white text-purple-600 px-16 py-6 rounded-full text-2xl font-bold hover:scale-110 transition-transform shadow-2xl" %>
+    <p class="mt-6 text-white/70 text-lg">
+      Free • Private • Fun AF
     </p>
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="bg-gray-950 text-gray-500 py-16 border-t border-gray-900">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid md:grid-cols-4 gap-12 mb-12">
+<!-- Footer - Casual -->
+<footer class="bg-gray-900 text-gray-400 py-12">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
       <div>
-        <h3 class="text-white text-2xl font-black mb-4">Vlad's Gem 💎</h3>
-        <p class="leading-relaxed">Relationship intelligence for WhatsApp</p>
+        <h3 class="text-white text-xl font-bold mb-3">Vlad's Gem 💎</h3>
+        <p class="text-sm">Relationship analytics that don't suck</p>
       </div>
       <div>
-        <h4 class="text-white font-bold mb-4">Product</h4>
-        <ul class="space-y-2">
-          <li><a href="#features" class="hover:text-white transition">Features</a></li>
-          <li><%= link_to "Dashboard", dashboard_path, class: "hover:text-white transition" %></li>
-          <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+        <h4 class="text-white font-bold mb-3">Product</h4>
+        <ul class="space-y-2 text-sm">
+          <li><%= link_to "Dashboard", dashboard_path, class: "hover:text-white" %></li>
+          <li><a href="#" class="hover:text-white">Features</a></li>
+          <li><a href="#" class="hover:text-white">Pricing</a></li>
         </ul>
       </div>
       <div>
-        <h4 class="text-white font-bold mb-4">Company</h4>
-        <ul class="space-y-2">
-          <li><a href="#" class="hover:text-white transition">About</a></li>
-          <li><a href="#" class="hover:text-white transition">Blog</a></li>
-          <li><a href="#" class="hover:text-white transition">Contact</a></li>
+        <h4 class="text-white font-bold mb-3">Legal</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Privacy</a></li>
+          <li><a href="#" class="hover:text-white">Terms</a></li>
         </ul>
       </div>
       <div>
-        <h4 class="text-white font-bold mb-4">Legal</h4>
-        <ul class="space-y-2">
-          <li><a href="#" class="hover:text-white transition">Privacy</a></li>
-          <li><a href="#" class="hover:text-white transition">Terms</a></li>
+        <h4 class="text-white font-bold mb-3">Social</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Twitter</a></li>
+          <li><a href="#" class="hover:text-white">GitHub</a></li>
         </ul>
       </div>
     </div>
-    <div class="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center">
-      <p>&copy; 2026 Vlad's Gem. All rights reserved.</p>
-      <div class="flex gap-6 mt-4 md:mt-0">
-        <a href="#" class="hover:text-white transition">Twitter</a>
-        <a href="#" class="hover:text-white transition">GitHub</a>
-      </div>
+    <div class="border-t border-gray-800 pt-8 text-center text-sm">
+      <p>&copy; 2026 Vlad's Gem. Made with 💜 and probably too much coffee.</p>
     </div>
   </div>
 </footer>
-
-<script>
-// Scroll reveal animation
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -100px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-    }
-  });
-}, observerOptions);
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-});
-</script>
