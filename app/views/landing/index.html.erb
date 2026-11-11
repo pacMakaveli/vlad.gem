@@ -1,0 +1,441 @@
+<% content_for :title, "Vlad's Gem 💎 - Your Relationship, Visualized" %>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+  
+  * {
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+  }
+
+  body > nav + div {
+    padding: 0 !important;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  @keyframes bounce-in {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .emoji-float {
+    animation: wiggle 2s ease-in-out infinite;
+  }
+
+  .pop-in {
+    animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .slide-up {
+    animation: slide-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .fun-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .data-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .data-card:hover {
+    transform: translateY(-8px) rotate(-2deg);
+  }
+
+  .screenshot-frame {
+    border: 8px solid #1a1a1a;
+    border-radius: 32px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+  }
+</style>
+
+<!-- Hero - Fun & Playful -->
+<div class="fun-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"10\" y=\"40\" font-size=\"40\">💎</text></svg>'); background-size: 120px;"></div>
+  
+  <div class="max-w-6xl mx-auto px-6 py-20 text-center relative z-10">
+    <div class="mb-6">
+      <span class="inline-block text-8xl emoji-float">💎</span>
+    </div>
+    
+    <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-tight pop-in">
+      Your Relationship,<br/>
+      <span class="text-yellow-300">Visualized</span>
+    </h1>
+
+    <p class="text-2xl md:text-3xl text-white/90 mb-4 font-medium slide-up" style="animation-delay: 0.2s;">
+      Like Spotify Wrapped, but for your WhatsApp chats
+    </p>
+
+    <p class="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto slide-up" style="animation-delay: 0.3s;">
+      Upload. Analyze. Orgasm on data. 📊✨
+    </p>
+
+    <%= link_to dashboard_path, class: "inline-block bg-white text-purple-600 px-12 py-5 rounded-full text-2xl font-bold hover:scale-110 transition-transform shadow-2xl slide-up", style: "animation-delay: 0.4s;" do %>
+      Start Your Journey →
+    <% end %>
+
+    <p class="mt-6 text-white/60 text-sm slide-up" style="animation-delay: 0.5s;">
+      Free forever • No signup • 2 mins setup
+    </p>
+  </div>
+</div>
+
+<!-- What You'll Discover -->
+<div class="bg-gray-50 py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      What You'll Discover 🔍
+    </h2>
+    <p class="text-xl text-center text-gray-600 mb-16">
+      Turn thousands of messages into beautiful insights
+    </p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Mood Shifts -->
+      <div class="data-card bg-gradient-to-br from-pink-500 to-rose-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">😊😢😍</div>
+        <h3 class="text-3xl font-bold mb-3">Mood Shifts</h3>
+        <p class="text-white/90 text-lg">
+          Watch emotions evolve over time. See the exact moment things got weird.
+        </p>
+      </div>
+
+      <!-- Life Chapters -->
+      <div class="data-card bg-gradient-to-br from-purple-500 to-indigo-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">📖</div>
+        <h3 class="text-3xl font-bold mb-3">Life Chapters</h3>
+        <p class="text-white/90 text-lg">
+          AI detects phases: honeymoon, crisis, comeback. Your relationship's story arc.
+        </p>
+      </div>
+
+      <!-- Emoji Madness -->
+      <div class="data-card bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">🤣🔥💀</div>
+        <h3 class="text-3xl font-bold mb-3">Emoji Analysis</h3>
+        <p class="text-white/90 text-lg">
+          Most used emoji? Favorite GIF? We count EVERYTHING.
+        </p>
+      </div>
+
+      <!-- Response Patterns -->
+      <div class="data-card bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">⏱️</div>
+        <h3 class="text-3xl font-bold mb-3">Response Times</h3>
+        <p class="text-white/90 text-lg">
+          Who leaves who on read? How fast do you reply? The tea is HOT.
+        </p>
+      </div>
+
+      <!-- Activity Patterns -->
+      <div class="data-card bg-gradient-to-br from-green-500 to-emerald-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">🌙☀️</div>
+        <h3 class="text-3xl font-bold mb-3">When You Chat</h3>
+        <p class="text-white/90 text-lg">
+          3am texts? Lunchtime conversations? Heatmaps show your rhythm.
+        </p>
+      </div>
+
+      <!-- Message Volume -->
+      <div class="data-card bg-gradient-to-br from-red-500 to-pink-500 rounded-3xl p-8 text-white">
+        <div class="text-6xl mb-4">📈</div>
+        <h3 class="text-3xl font-bold mb-3">The Numbers</h3>
+        <p class="text-white/90 text-lg">
+          100K messages analyzed. Every. Single. Word. Counted.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- How It Works - Super Simple -->
+<div class="bg-white py-24">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      Dead Simple Setup 🚀
+    </h2>
+    <p class="text-xl text-center text-gray-600 mb-16">
+      Seriously, your grandma could do this
+    </p>
+
+    <div class="space-y-12">
+      <div class="flex items-start gap-6">
+        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+          1
+        </div>
+        <div>
+          <h3 class="text-3xl font-bold mb-2">Export your chat</h3>
+          <p class="text-xl text-gray-600">
+            Open WhatsApp → Pick a chat → More → Export Chat → <strong>Without Media</strong><br/>
+            <span class="text-sm text-gray-500">(We don't need your 2,000 cat pics)</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-6">
+        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+          2
+        </div>
+        <div>
+          <h3 class="text-3xl font-bold mb-2">Upload it here</h3>
+          <p class="text-xl text-gray-600">
+            Drag & drop the .txt file. That's it. We handle the rest.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-6">
+        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+          3
+        </div>
+        <div>
+          <h3 class="text-3xl font-bold mb-2">Explore & share</h3>
+          <p class="text-xl text-gray-600">
+            Beautiful charts. Juicy insights. Screenshot-worthy stats. Go nuts.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 text-center">
+      <%= link_to "Try It Now →", dashboard_path, class: "inline-block bg-purple-600 text-white px-12 py-5 rounded-full text-2xl font-bold hover:bg-purple-700 transition-all shadow-xl" %>
+    </div>
+  </div>
+</div>
+
+<!-- Features Showcase -->
+<div class="bg-gray-900 text-white py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      The Good Stuff 🎁
+    </h2>
+    <p class="text-xl text-center text-gray-400 mb-16">
+      Everything you get (for free, btw)
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="border-l-4 border-purple-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">📊 Timeline View</h3>
+        <p class="text-gray-400 text-lg">
+          Scroll through your entire conversation history with sentiment indicators. Like a time machine, but with receipts.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-blue-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">💓 Pulse Analytics</h3>
+        <p class="text-gray-400 text-lg">
+          Message volume over time. See when you were obsessed vs. when you ghosted each other.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-pink-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">😊 Sentiment Shift</h3>
+        <p class="text-gray-400 text-lg">
+          AI-powered emotion tracking. Watch the vibes change from 🥰 to 🙄 to 💀 in real-time.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-green-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">⏰ Response Drift</h3>
+        <p class="text-gray-400 text-lg">
+          Who texts first? Who responds faster? All the receipts, visualized beautifully.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-yellow-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">🌙 Daily Rhythm</h3>
+        <p class="text-gray-400 text-lg">
+          When do you actually talk? 3am vulnerability hours? Lunch break check-ins? We know.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-orange-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">📅 Daily Breakdown</h3>
+        <p class="text-gray-400 text-lg">
+          Hour-by-hour breakdown for every single day. For the true data nerds.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-red-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">📖 Chapters</h3>
+        <p class="text-gray-400 text-lg">
+          AI automatically detects relationship phases based on gaps and patterns. Your story, segmented.
+        </p>
+      </div>
+
+      <div class="border-l-4 border-teal-500 pl-6">
+        <h3 class="text-2xl font-bold mb-3">🔄 Smart Imports</h3>
+        <p class="text-gray-400 text-lg">
+          Upload new exports anytime. We're smart enough to only add new messages. No duplicates, ever.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy (Actually Important) -->
+<div class="bg-purple-50 py-24">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <div class="text-6xl mb-6">🔒</div>
+    <h2 class="text-5xl font-black mb-6">Your Data Stays Yours</h2>
+    <p class="text-2xl text-gray-700 mb-8 leading-relaxed">
+      Everything happens <strong>on your device</strong>. We don't store your messages. 
+      We can't read them. We won't sell them. Your secrets are safe.
+    </p>
+    <p class="text-lg text-gray-600">
+      Seriously. We're not trying to be creepy. Just fun.
+    </p>
+  </div>
+</div>
+
+<!-- Pricing - Keep It Real -->
+<div class="bg-white py-24">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-5xl md:text-7xl font-black text-center mb-4">
+      Pricing 💰
+    </h2>
+    <p class="text-xl text-center text-gray-600 mb-16">
+      (Spoiler: It's free)
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Free -->
+      <div class="border-4 border-gray-200 rounded-3xl p-8 hover:border-purple-500 transition-all">
+        <h3 class="text-3xl font-black mb-4">Free</h3>
+        <div class="text-6xl font-black mb-6">$0</div>
+        <ul class="space-y-3 mb-8 text-lg">
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>1 conversation</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>10K messages</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>All features</span>
+          </li>
+        </ul>
+        <%= link_to "Start Now", dashboard_path, class: "block w-full bg-gray-900 text-white py-4 rounded-full text-lg font-bold hover:bg-gray-800 transition text-center" %>
+      </div>
+
+      <!-- Pro -->
+      <div class="border-4 border-purple-600 rounded-3xl p-8 relative transform scale-105 shadow-xl">
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold">
+          COMING SOON
+        </div>
+        <h3 class="text-3xl font-black mb-4">Pro</h3>
+        <div class="text-6xl font-black mb-6">TBC</div>
+        <ul class="space-y-3 mb-8 text-lg">
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Unlimited convos</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Unlimited messages</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Audio transcription</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Export as PDF</span>
+          </li>
+        </ul>
+        <button class="block w-full bg-purple-600 text-white py-4 rounded-full text-lg font-bold opacity-50 cursor-not-allowed text-center">
+          Coming Soon
+        </button>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="border-4 border-gray-200 rounded-3xl p-8 hover:border-purple-500 transition-all">
+        <h3 class="text-3xl font-black mb-4">Enterprise</h3>
+        <div class="text-6xl font-black mb-6">TBC</div>
+        <ul class="space-y-3 mb-8 text-lg">
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Everything in Pro</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Team features</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-500 text-2xl">✓</span>
+            <span>Self-hosted option</span>
+          </li>
+        </ul>
+        <a href="#" class="block w-full bg-gray-900 text-white py-4 rounded-full text-lg font-bold hover:bg-gray-800 transition text-center">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Final CTA - Let's Go -->
+<div class="fun-gradient py-32 text-center">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-6xl md:text-8xl font-black text-white mb-8 leading-tight">
+      Ready to Dive In? 🏊‍♂️
+    </h2>
+    <p class="text-2xl text-white/90 mb-12">
+      Your relationship data is waiting. Let's make it beautiful.
+    </p>
+    <%= link_to "Analyze My Messages →", dashboard_path, class: "inline-block bg-white text-purple-600 px-16 py-6 rounded-full text-2xl font-bold hover:scale-110 transition-transform shadow-2xl" %>
+    <p class="mt-6 text-white/70 text-lg">
+      Free • Private • Fun AF
+    </p>
+  </div>
+</div>
+
+<!-- Footer - Casual -->
+<footer class="bg-gray-900 text-gray-400 py-12">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h3 class="text-white text-xl font-bold mb-3">Vlad's Gem 💎</h3>
+        <p class="text-sm">Relationship analytics that don't suck</p>
+      </div>
+      <div>
+        <h4 class="text-white font-bold mb-3">Product</h4>
+        <ul class="space-y-2 text-sm">
+          <li><%= link_to "Dashboard", dashboard_path, class: "hover:text-white" %></li>
+          <li><a href="#" class="hover:text-white">Features</a></li>
+          <li><a href="#" class="hover:text-white">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-bold mb-3">Legal</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Privacy</a></li>
+          <li><a href="#" class="hover:text-white">Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-bold mb-3">Social</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Twitter</a></li>
+          <li><a href="#" class="hover:text-white">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-800 pt-8 text-center text-sm">
+      <p>&copy; 2026 Vlad's Gem. Made with 💜 and probably too much coffee.</p>
+    </div>
+  </div>
+</footer>

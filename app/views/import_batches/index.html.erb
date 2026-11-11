@@ -1,0 +1,75 @@
+<% content_for :title, "Import History - #{@conversation.title}" %>
+
+<div class="mb-8">
+  <%= link_to "← Back to #{@conversation.title}", conversation_path(@conversation), class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<div class="flex justify-between items-center mb-8">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900">Import History</h1>
+    <p class="text-gray-600 mt-2">All imports for this conversation</p>
+  </div>
+  <%= link_to "New Import", new_conversation_import_batch_path(@conversation), class: "bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700" %>
+</div>
+
+<% if @import_batches.any? %>
+  <div class="space-y-4">
+    <% @import_batches.each do |import_batch| %>
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center space-x-3 mb-2">
+              <h3 class="text-lg font-semibold text-gray-900"><%= import_batch.filename %></h3>
+              <% case import_batch.status %>
+              <% when "completed" %>
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Completed</span>
+              <% when "processing" %>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Processing</span>
+              <% when "pending" %>
+                <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Pending</span>
+              <% when "failed" %>
+                <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Failed</span>
+              <% end %>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-3">
+              Imported <%= import_batch.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+            </p>
+
+            <% if import_batch.status == "completed" %>
+              <div class="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span class="text-gray-500">Imported:</span>
+                  <span class="font-medium text-gray-900"><%= import_batch.messages_imported %></span>
+                </div>
+                <div>
+                  <span class="text-gray-500">Skipped:</span>
+                  <span class="font-medium text-gray-900"><%= import_batch.messages_skipped %></span>
+                </div>
+                <div>
+                  <span class="text-gray-500">New:</span>
+                  <span class="font-medium text-green-600"><%= import_batch.new_messages_count %></span>
+                </div>
+              </div>
+            <% elsif import_batch.status == "failed" %>
+              <div class="mt-2 p-3 bg-red-50 border border-red-200 rounded">
+                <p class="text-sm text-red-800">
+                  <strong>Error:</strong> <%= import_batch.error_message %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="ml-4">
+            <%= link_to "View Details", conversation_import_batch_path(@conversation, import_batch), class: "text-purple-600 hover:text-purple-700 text-sm font-medium" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <p class="text-gray-500 mb-4">No imports yet</p>
+    <%= link_to "Import Your First Chat", new_conversation_import_batch_path(@conversation), class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 inline-block" %>
+  </div>
+<% end %>

@@ -1,0 +1,37 @@
+<% content_for :title, "New Conversation - Vlad's Gem 💎" %>
+
+<div class="mb-8">
+  <%= link_to "← Back", conversations_path, class: "text-purple-600 hover:text-purple-700" %>
+</div>
+
+<div class="max-w-2xl">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Create New Conversation</h1>
+
+  <%= form_with(model: @conversation, class: "space-y-6") do |form| %>
+    <% if @conversation.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+        <h2 class="font-semibold mb-2"><%= pluralize(@conversation.errors.count, "error") %> prohibited this conversation from being saved:</h2>
+        <ul class="list-disc list-inside">
+          <% @conversation.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :title, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.text_field :title, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent", placeholder: "e.g., Chat with Gemma" %>
+    </div>
+
+    <div>
+      <%= form.label :description, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.text_area :description, rows: 4, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent", placeholder: "Optional description..." %>
+    </div>
+
+    <div class="flex justify-end space-x-3">
+      <%= link_to "Cancel", conversations_path, class: "px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50" %>
+      <%= form.submit "Create Conversation", class: "px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700" %>
+    </div>
+  <% end %>
+</div>
