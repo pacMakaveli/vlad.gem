@@ -46,7 +46,7 @@ gem "image_processing", "~> 1.2"
 gem "sidekiq", "~> 7.0"
 
 # Audio transcription
-gem "ruby-openai", "~> 7.0"
+gem "ruby-openai", "~> 8.3"
 
 # Sentiment analysis
 gem "sentimental", "~> 1.4"
