@@ -345,7 +345,7 @@ GEM
     ruby-vips (2.3.0)
       ffi (~> 1.12)
       logger
-    rubyzip (3.2.2)
+    rubyzip (3.7.0)
     securerandom (0.4.1)
     selenium-webdriver (4.43.0)
       base64 (~> 0.2)
@@ -458,7 +458,7 @@ DEPENDENCIES
   rails (~> 8.1.4)
   rubocop-rails-omakase
   ruby-openai (~> 8.3)
-  rubyzip (~> 3.2)
+  rubyzip (~> 3.7)
   selenium-webdriver
   sentimental (~> 1.4)
   sidekiq (~> 8.1)
